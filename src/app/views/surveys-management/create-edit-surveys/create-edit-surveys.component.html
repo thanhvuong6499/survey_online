@@ -7,9 +7,8 @@
                 [required]="true">
         </mat-form-field>
 
-        <mat-form-field class="full-width" >
-            <textarea formControlName="description" style="resize: none;"  matInput
-            placeholder="Description"></textarea>
+        <mat-form-field class="full-width">
+            <textarea formControlName="description" style="resize: none;" matInput placeholder="Description"></textarea>
         </mat-form-field>
 
         <div class="survey-options">
@@ -26,7 +25,7 @@
                                     <input formControlName="questionTitle" maxlength="200" matInput
                                         placeholder="Question title" [required]="true">
                                 </mat-form-field>
-                                <mat-form-field class="full-width"  appearance="outline">
+                                <mat-form-field class="full-width" appearance="outline">
                                     <mat-label>Select an type</mat-label>
                                     <mat-select formControlName="questionType" placeholder="Question type"
                                         ng-model="myVar" [(value)]="selectedOption[i]"
@@ -115,10 +114,13 @@
                                         </mat-form-field>
 
                                     </div>
-                                    <div *ngSwitchCase="'Paragraph'" >
-                                        <div class="full-width"  *ngIf="questionCtrl.controls.questionGroup.controls.content" >
-                                            <ckeditor  formControlName="content"
-                                            name="myckeditor"  required [editor]="Editor"   [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']}"  debounce="500">
+                                    <div *ngSwitchCase="'Paragraph'">
+                                        <div class="full-width"
+                                            *ngIf="questionCtrl.controls.questionGroup.controls.content">
+                                            <ckeditor formControlName="content" name="myckeditor" required
+                                                [editor]="Editor"
+                                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']}"
+                                                debounce="500">
                                             </ckeditor>
                                             <!-- <ckeditor matCkeditor   ></ckeditor> -->
                                         </div>
@@ -145,7 +147,7 @@
 
 
         <div class="button-row">
-            <button class="full-width" color="primary" type="submit" mat-raised-button >
+            <button class="full-width" color="primary" type="submit" mat-raised-button>
 
 
                 <span *ngIf="!editMode">Add New Survey</span>
