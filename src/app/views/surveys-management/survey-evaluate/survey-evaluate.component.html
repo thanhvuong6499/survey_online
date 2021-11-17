@@ -1,0 +1,139 @@
+<mat-card style="width: 80%; margin:auto; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2)">
+    <!-- <h2 class="page-title" style="text-align: center;;">Đánh giá khảo sát</h2> -->
+    <div
+        style="background-color: rgb(72, 59, 126);width: 80%;margin: auto;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2) ; border-top-right-radius:50px; border-top-left-radius:50px">
+        <mat-label style="font-size: large; text-align: center;"></mat-label><br />
+
+    </div>
+    <mat-card style="width: 80%; margin:auto; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+
+        <div class="full-width" style="text-align: center;">
+            <!-- <input formControlName="surveyTitle" [disabled]='true' [(ngModel)]="surveyModel.name" matInput placeholder="Survey Title" maxlength="50"
+                    [required]="true"> -->
+            <!-- <mat-label style="font-size: large; text-align: center;">Survey Title</mat-label><br /> -->
+            <mat-label style="font-size: 30px; text-align: center;">{{surveyModel.name}}</mat-label>
+        </div>
+        <mat-divider style="margin-top: 30px;"></mat-divider>
+        <div class="full-width" style="margin-top: 60px;">
+            <mat-label style="font-size: large;">Description</mat-label><br />
+            <mat-form-field class="full-width" appearance="outline">
+                <textarea [(ngModel)]="surveyModel.description" disabled="true"
+                    style="resize: none; font-size: medium; border: gray; border-width: 1px;" matInput></textarea>
+            </mat-form-field>
+        </div>
+        <!-- <mat-card style="width: 100%; margin:auto; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2)"> -->
+
+        <form [formGroup]="answerForm" (ngSubmit)="onSubmit()" autocomplete="off">
+
+            <div class="survey-options" formArrayName="answers">
+
+                <div class="poll-options">
+                    <ol class="list-style">
+                        <!-- <li *ngFor="let question of questionListModel; let i = index;"> -->
+                        <li *ngFor="let question of answerForm.get('answers')['controls']; let i = index;">
+                            <!-- <input  [(ngModel)]="answerModel.questionId" name="questionId" value="{{question.questionId}}">
+                                    {{question.questionId}} -->
+                            <div [formGroupName]="i">
+                                <!-- 
+                                    
+                                {{question.questionId}} -->
+                                <!-- <label >{{getControlLabel('studentNumber')}}</label> -->
+                                <div class="full-width">
+                                    <input disabled="true" formControlName="questionTitle"
+                                        style="width: 100%; background-color: white;">
+                                </div>
+                                <!-- <mat-form-field class="full-width">
+                                    <input formControlName="questionTitle" maxlength="200" matInput disabled="true"
+                                       >
+                                </mat-form-field> -->
+                                <div class="full-width" style="border:grey; border-width: 1px;">
+                                    <!-- <mat-label >{{question.questionTitle}}</mat-label> -->
+                                </div>
+
+                                <!-- <mat-form-field class="full-width" appearance="outline">
+                                            <mat-label>Select an type</mat-label>
+                                            <mat-select formControlName="questionType" placeholder="Question type"
+                                                ng-model="myVar" [(value)]="selectedOption[i]"
+                                                (selectionChange)="onSeletQuestionType(selectedOption[i], i)"
+                                                [required]="true">
+                                                <mat-option *ngFor="let type of questions" [value]="type.value">
+                                                    {{type.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field> -->
+                                <div>
+                                    <!-- {{question.questionType}} -->
+                                    <div *ngIf="question.controls.questionType.value == 'Text' ">
+
+                                        <mat-form-field class="full-width">
+                                            <input  matInput
+                                                placeholder="Vui lòng nhập câu trả lời">
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="question.controls.questionType.value == 'Single choice' ">
+
+                                        <div class="full-width" formArrayName="questionOptions"
+                                            *ngFor="let option of question.controls.questionOptions.controls;let j = index">
+                                            <div [formGroupName]="j" >
+                                                <!-- <input formControlName="isSelected" type="radio" value ="{{j}}"> -->
+                                                <mat-radio-group #rGroup formControlName="isSelected" style="width:100%;display: inline-block">
+
+                                                <mat-radio-button  radioGroup="rGroup" style="margin-top: 20px;"></mat-radio-button>
+                                                <input disabled="true" formControlName="optionText"
+                                                style=" background-color: white;display: inline-block">
+                                                <!-- <label value='{{question.controls.questionOptions.controls.optionText}}'></label> -->
+                                                </mat-radio-group>
+                                                <!-- <mat-radio-group #rGroup formControlName="radioValue"> -->
+
+                                                
+                                                    <!-- {{question.controls.questionOptions.controls.optionText}} -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="question.controls.questionType.value == 'Multi choice' ">
+                                        <div class="full-width" formArrayName="questionOptions"
+                                            *ngFor="let option of question.controls.questionOptions.controls;let k = index">
+                                            <div [formGroupName]="k" style="display: inline-block" >
+                                                <mat-checkbox style="margin-top: 20px;" formControlName="isSelected">
+                                                </mat-checkbox>
+                                                <input disabled="true" formControlName="optionText"
+                                                style=" background-color: white;display: inline-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="question.controls.questionType.value == 'Paragraph' ">
+                                        <div class="full-width">
+                                            <div class="inner" [innerHTML]="[question.controls.questionContent.value]">
+                                            </div>
+                                            <!-- <mat-label   ></mat-label> -->
+                                            <!-- {{question.questionContent}} -->
+                                            <mat-form-field class="full-width" appearance="outline">
+                                                <textarea formControlName="answerContent"
+                                                    placeholder="Vui lòng nhập câu trả lời của bạn" rows="5"
+                                                    style="resize: none; font-size: medium; border: gray; border-width: 1px;"
+                                                    matInput></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="full-width" color="primary" type="submit" mat-raised-button>
+
+
+                    <span *ngIf="!editMode">Submit</span>
+                </button>
+            </div>
+        </form>
+        <!-- </mat-card> -->
+
+    </mat-card>
+</mat-card>
+{{selectedOption | json}}

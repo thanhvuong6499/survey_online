@@ -1,0 +1,77 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card card-plain">
+            <div class="col-md-12">
+                <div class="card">
+                   
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th style="text-align: center;">
+                                        ID
+                                    </th>
+                                    <th style="text-align: center;">
+                                        Username
+                                    </th>
+                                    <th style="text-align: center;">
+                                        Email
+                                    </th>
+                                    <th style="text-align: center;">
+                                        Status
+                                    </th>
+                                    <!-- <th>
+                                        CreatedDate
+                                    </th> -->
+                                    
+                                    <th style="text-align: center;">
+                                        Action
+                                    </th>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let item of users">
+                                      <td style="text-align: center;">
+                                          {{item.userId}}
+                                      </td>
+                                      <td style="text-align: center;">
+                                          {{item.username}}
+                                      </td>
+                                      <td style="text-align: center;">
+                                          {{item.email}}
+                                      </td>
+                                      <td style="text-align: center;">
+                                          {{(item.isActive === 1)? 'Actived':'Not actived'}}
+                                      </td>
+                                      <!-- <td style="text-align: center;">
+                                          {{stringToDate(item.createdDate)}}
+                                      </td> -->
+                                      <!-- <td style="text-align: center;">
+                                          {{stringToDate(item.expireDate)}}
+                                      </td> -->
+                                      <!-- <td style="text-align: center;">
+                                          {{(item.statusPayment===1)?'Monthly Subscription ':''}}
+                                          {{(item.statusPayment===2)?'Yearly Subscription  ':''}}
+                                      </td> -->
+                                      <td style="text-align: center;">
+                                          <button (click)="onActive(item.userId)" class="btn btn-primary fa fa-check-square"
+                                                  type="submit" style="font-size: 13px;">   Active</button>
+                                      </td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                            <div *ngIf="totalRecords > 0 else nondata" style="margin-left: 37%;">
+                              <nav>
+                                  <ul class="pagination">
+                                      <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [maxSize]="5"
+                                          [pageSize]="pageSize" [rotate]="true" [boundaryLinks]="true"
+                                          (pageChange)="loadPages($event, condition.PageSize)"></ngb-pagination>
+                                  </ul>
+                              </nav>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
