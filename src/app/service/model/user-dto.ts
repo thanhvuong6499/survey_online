@@ -1,7 +1,7 @@
 
 import { Token } from './token-dto';
 export class User {
-       public id: number;
+       public userId: number;
        public userName: string;
        public passwordNew?: string;
        public roles?: string;

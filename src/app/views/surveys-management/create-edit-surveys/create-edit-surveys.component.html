@@ -1,33 +1,34 @@
-<h2 class="page-title" style="text-align: center;;">Create Survey</h2>
+
+<h2 *ngIf="!editMode" class="page-title" style="text-align: center;;">Tạo khảo sát</h2>
+<h2 *ngIf="editMode" class="page-title" style="text-align: center;;">Chỉnh sửa khảo sát</h2>
 <mat-card style="width: 80%; margin:auto; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2)">
 
     <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()" autocomplete="off">
         <mat-form-field class="full-width">
-            <input formControlName="surveyTitle" matInput placeholder="Enter Survey Title" maxlength="50"
+            <input formControlName="surveyTitle" matInput placeholder="Tiêu đề khảo sát" maxlength="50"
                 [required]="true">
         </mat-form-field>
 
         <mat-form-field class="full-width">
-            <textarea formControlName="description" style="resize: none;" matInput placeholder="Description"></textarea>
+            <textarea formControlName="description" style="resize: none;" matInput placeholder="Mô tả"></textarea>
         </mat-form-field>
 
-        <div class="survey-options">
+        <div class="survey-options" formArrayName="surveyQuestions">
 
-            <div formArrayName="surveyQuestions" class="poll-options">
-                <h3 class="list-title">Add Survey Questions </h3>
+            <div  class="poll-options">
+                <h3 class="list-title">Thêm câu hỏi khảo sát </h3>
 
 
                 <ol class="list-style">
                     <li *ngFor="let questionCtrl of surveyForm.get('surveyQuestions')['controls']; let i = index">
                         <div [formGroupName]="i">
-                            <div>
                                 <mat-form-field class="full-width">
                                     <input formControlName="questionTitle" maxlength="200" matInput
-                                        placeholder="Question title" [required]="true">
+                                        placeholder="Tiêu đề câu hỏi" [required]="true">
                                 </mat-form-field>
                                 <mat-form-field class="full-width" appearance="outline">
-                                    <mat-label>Select an type</mat-label>
-                                    <mat-select formControlName="questionType" placeholder="Question type"
+                                    <mat-label>Chọn loại câu hỏi</mat-label>
+                                    <mat-select formControlName="questionType" placeholder="Loại câu hỏi"
                                         ng-model="myVar" [(value)]="selectedOption[i]"
                                         (selectionChange)="onSeletQuestionType(selectedOption[i], i)" [required]="true">
                                         <mat-option *ngFor="let type of questions" [value]="type.value">
@@ -36,12 +37,12 @@
                                     </mat-select>
                                 </mat-form-field>
 
-                                <div formGroupName="questionGroup" [ngSwitch]="selectedOption[i]">
-                                    <div *ngSwitchCase="'Single choice'">
+                                <div formGroupName="questionGroup" >
+                                    <div  *ngIf="questionCtrl.controls.questionType.value == 'Single choice' " >
                                         <div *ngIf="questionCtrl.controls.questionGroup.controls.options">
                                             <ul class="question-type" formArrayName="options">
                                                 <li
-                                                    *ngFor="let optionCtrl of questionCtrl.controls.questionGroup.controls.options.controls let j = index">
+                                                    *ngFor="let optionCtrl of questionCtrl.controls.questionGroup.controls.options.controls; let j = index">
                                                     <div [formGroupName]="j">
                                                         <mat-radio-button disabled></mat-radio-button>
                                                         <mat-form-field>
@@ -58,24 +59,14 @@
                                                 </li>
                                             </ul>
                                             <button mat-raised-button type="button" (click)="addOption(i)"
-                                                class="mat-sm-button add-option-btn" color="accent"> Add option</button>
+                                                class="mat-sm-button add-option-btn" color="accent"> Thêm lựa chọn</button>
                                         </div>
-                                        <div *ngIf="questionCtrl.controls.questionGroup.controls.showRemarksBox">
-                                            <mat-slide-toggle formControlName="showRemarksBox">
-                                                Show Remarks Textarea
-                                            </mat-slide-toggle>
-                                            <mat-form-field class="full-width">
-                                                <textarea style="resize: none;" disabled matInput
-                                                    placeholder="Textarea"></textarea>
-                                            </mat-form-field>
-                                        </div>
-
                                     </div>
-                                    <div *ngSwitchCase="'Multi choice'">
+                                    <div *ngIf="questionCtrl.controls.questionType.value == 'Multi choice'">
                                         <div *ngIf="questionCtrl.controls.questionGroup.controls.options">
                                             <ul class="question-type" formArrayName="options">
                                                 <li
-                                                    *ngFor="let optionCtrl of questionCtrl.controls.questionGroup.controls.options.controls let j = index">
+                                                    *ngFor="let optionCtrl of questionCtrl.controls.questionGroup.controls.options.controls; let j = index">
                                                     <div [formGroupName]="j">
                                                         <mat-checkbox disabled color='primary'> </mat-checkbox>
 
@@ -94,27 +85,26 @@
                                                 </li>
                                             </ul>
                                             <button mat-raised-button type="button" (click)="addOption(i)"
-                                                class="mat-sm-button add-option-btn" color="accent"> Add option</button>
-                                        </div>
-                                        <div *ngIf="questionCtrl.controls.questionGroup.controls.showRemarksBox">
-                                            <mat-slide-toggle formControlName="showRemarksBox">
-                                                Show Remarks Textarea
-                                            </mat-slide-toggle>
-                                            <mat-form-field class="full-width">
-                                                <textarea style="resize: none;" disabled matInput
-                                                    placeholder="Textarea"></textarea>
-                                            </mat-form-field>
+                                                class="mat-sm-button add-option-btn" color="accent"> Thêm lựa chọn</button>
                                         </div>
                                     </div>
-                                    <div *ngSwitchCase="'Text'">
+                                    <div *ngIf="questionCtrl.controls.questionType.value == 'Text'">
 
+                                        <!-- <mat-form-field class="full-width">
+                                            <textarea style="resize: none;" disabled matInput
+                                                placeholder="Textarea"></textarea>
+                                        </mat-form-field> -->
+
+                                    </div>
+                                    <div *ngIf="questionCtrl.controls.questionType.value == 'Number'">
+<!-- 
                                         <mat-form-field class="full-width">
                                             <textarea style="resize: none;" disabled matInput
                                                 placeholder="Textarea"></textarea>
-                                        </mat-form-field>
+                                        </mat-form-field> -->
 
                                     </div>
-                                    <div *ngSwitchCase="'Paragraph'">
+                                    <div *ngIf="questionCtrl.controls.questionType.value == 'Paragraph'">
                                         <div class="full-width"
                                             *ngIf="questionCtrl.controls.questionGroup.controls.content">
                                             <ckeditor formControlName="content" name="myckeditor" required
@@ -122,13 +112,11 @@
                                                 [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']}"
                                                 debounce="500">
                                             </ckeditor>
-                                            <!-- <ckeditor matCkeditor   ></ckeditor> -->
                                         </div>
                                     </div>
 
                                 </div>
 
-                            </div>
                             <button *ngIf="i>0" mat-mini-fab color="warn" type="button" (click)="onRemoveQuestion(i)"
                                 class="poll-remove-btn">
                                 X
@@ -138,7 +126,7 @@
                 </ol>
                 <div fxLayout="row" fxLayoutAlign="end">
                     <button type="button" mat-raised-button (click)="onAddQuestion()">
-                        Add Question
+                        Thêm câu hỏi
                     </button>
                 </div>
             </div>
@@ -150,11 +138,9 @@
             <button class="full-width" color="primary" type="submit" mat-raised-button>
 
 
-                <span *ngIf="!editMode">Add New Survey</span>
-                <span *ngIf="editMode">Update Survey</span>
+                <span *ngIf="!editMode">Thêm mới khảo sát</span>
+                <span *ngIf="editMode">Chỉnh sửa khảo sát</span>
             </button>
         </div>
     </form>
 </mat-card>
-
-{{selectedOption | json}}

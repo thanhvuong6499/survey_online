@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-danger" style="display: flex; justify-content: space-between;">
-                        <h4 class="card-title ">Recipe Management</h4>
+                        <h4 class="card-title ">Survey Management</h4>
                         <button class="btn btn-primary btn-sm" style="float: right; margin-top: 4px; font-size: 13px;"
                             routerLink="/create-survey">
                             <span class="fa fa-plus"></span>
@@ -14,6 +14,7 @@
                         </button>
                     </div>
                     <div class="card-body">
+                        <span *ngIf="loading" style="margin-left: 50%;" class="spinner-border spinner-border-sm mr-1"></span>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
@@ -47,16 +48,21 @@
                                             {{survey.description}}
                                         </td>
                                         <td style="text-align: center;">
-                                            {{(survey.status)===0?'Pending':''}}
-                                            {{(survey.status)===1?'Approved':''}}
-                                            {{(survey.status)===2?'Paid':''}}
+                                            <!-- {{(survey.status)===0?'Private':''}}
+                                            {{(survey.status)===1?'Public':''}} -->
+                                            <button (click)="onChangeStatus(survey.code)" class="btn btn-primary fa fa-check-square"
+                                                  type="submit" style="font-size: 13px;"> {{(survey.status === 0)? 'Private':'Public'}}</button>
+                                            <!-- {{(survey.status)===2?'Paid':''}}
+                                                
                                             {{(survey.status)===3?'Free':''}}
-                                            {{(survey.status)===4?'Rejected':''}}
+                                            {{(survey.status)===4?'Rejected':''}} -->
                                         </td>
                                         <td style="text-align: center;">
-                                            <button class="btn btn-primary fa fa-eye"
-                                                routerLinkActive="router-link-active" [routerLink]="['/evaluate-survey']" routerLinkActive="router-link-active"  style="font-size: 14px;"></button>
-                                            <button [routerLink]="['/evaluate-survey', survey.code]" class="btn btn-primary fa fa-edit" replaceUrl="true"
+                                            <!-- <button class="btn btn-primary fa fa-eye"
+                                                routerLinkActive="router-link-active" [routerLink]="['/evaluate-survey']" routerLinkActive="router-link-active"  style="font-size: 14px;"></button> -->
+                                            <button  [routerLink]="['/edit-survey', survey.code]" class="btn btn-primary fa fa-edit" replaceUrl="true"
+                                                queryParamsHandling="merge" style="font-size: 14px;"></button>
+                                            <button *ngIf="survey.status == 1" (click)="OpenModal(survey.code)" class="btn btn-primary fa fa-link" replaceUrl="true"
                                                 queryParamsHandling="merge" style="font-size: 14px;"></button>
                                             <!-- <button class="btn btn-primary fa fa-trash" type="submit" (click)="onDelete(recipe.id)"
                                                 style="font-size: 14px;"></button> -->

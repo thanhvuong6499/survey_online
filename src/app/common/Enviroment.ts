@@ -1,7 +1,9 @@
 import { HttpHeaders } from '@angular/common/http';
 
 export const ApiUrl = {
-    apiUrl: "https://localhost:44357/api/",
+    // apiUrl: "http://localhost:59513/api/",
+    // prod: true
+    apiUrl:  "http://35.188.14.184:59513/api/",
     prod: true
 };
 
@@ -21,6 +23,11 @@ export const CacheHeaders = {
 export const HttpHeaderOptionsFormData = {
     headers: new HttpHeaders({
         'Content-Type': 'multipart/form-data',
-        'Accept': '*/*'
+        'Accept': '*/*',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*",
+        "X-Content-Type-Options": "nosniff",
+        "Access-Control-Expose-Headers": "xsrf-token"
     })
 }

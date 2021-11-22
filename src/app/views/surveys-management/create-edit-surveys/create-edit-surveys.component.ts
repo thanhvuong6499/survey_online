@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CKEditorComponent } from 'ng2-ckeditor';
-import { Survey, Option } from '../../../service/model/survey-dto';
+import { Survey, Option, SurveyModel, QuestionListModel, OptionListModel } from '../../../service/model/survey-dto';
 import { UserLogin } from '../../../service/model/user-dto';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { SurveysService } from '../../../service/api/survey.service';
@@ -41,13 +41,20 @@ export class CreateEditSurveysComponent implements OnInit {
   name = 'ng2-ckeditor';
   ckeConfig: any;
   mycontent: string;
+  surveyCode: string;
+  surveyModel: SurveyModel;
+  questionListModel: QuestionListModel[] = [];
+  optionListSingleModel: OptionListModel[] = [];
+  optionListMultiModel: OptionListModel[] = [];
+  optionGroup: FormGroup;
   log: string = '';
   @ViewChild("myckeditor") ckeditor: any;
   questions: QuestionType[] = [
-    { value: 'Single choice', viewValue: 'Single choice' },
-    { value: 'Multi choice', viewValue: 'Multi choice' },
-    { value: 'Text', viewValue: 'Text' },
-    { value: 'Paragraph', viewValue: 'Paragraph' }
+    { value: 'Single choice', viewValue: 'Trắc nghiệm' },
+    { value: 'Multi choice', viewValue: 'Hộp kiểm' },
+    { value: 'Text', viewValue: 'Câu hỏi ngắn' },
+    { value: 'Paragraph', viewValue: 'Đoạn' },
+    { value: 'Number', viewValue: 'Câu hỏi số' }
   ];
 
   config = {
@@ -78,7 +85,8 @@ export class CreateEditSurveysComponent implements OnInit {
     // private surveyService: SurveyService,
     private _service: SurveysService,
     private router: Router,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    private activateRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -109,6 +117,86 @@ export class CreateEditSurveysComponent implements OnInit {
   }
 
   private initForm() {
+    this.surveyForm = new FormGroup({});
+    this.surveyCode = this.activateRoute.snapshot.params.code;
+    if (this.surveyCode != null) {
+      this.editMode = true;
+      this._service.getSurveyByCode(this.surveyCode).subscribe(res => {
+        this.surveyModel = res.item
+        console.log('a model is' + this.surveyModel.questionList[0])
+        this.questionListModel = this.surveyModel.questionList
+        let surveyTitle = this.surveyModel.name;
+        let description = this.surveyModel.description;
+        let surveyType = '';
+        let surveyQuestions = new FormArray([]);
+
+        this.surveyForm = new FormGroup({
+          'surveyTitle': new FormControl(surveyTitle, [Validators.required]),
+          'description': new FormControl(description, [Validators.required]),
+          // 'surveyType': new FormControl(surveyType, [Validators.required]),
+          'surveyQuestions': surveyQuestions,
+          // 'IsAnonymous': new FormControl(false, [Validators.required])
+        });
+        let options = new FormArray([]);
+        let content = new FormControl('');
+        let showRemarksBox = new FormControl(true);
+
+
+
+        for (let index = 0; index < this.questionListModel.length; index++) {
+          let questionGroup = new FormGroup({
+            'options': new FormArray([]),
+            'content': new FormControl(''),
+            'showRemarksBox': new FormControl('')
+
+          });
+          // this.answers = this.questionListModel
+          const surveyQuestionItem = new FormGroup({
+            'questionTitle': new FormControl(this.questionListModel[index].questionTitle, Validators.required),
+            'questionType': new FormControl(this.questionListModel[index].questionType, Validators.required),
+            // 'questionContent': new FormControl(''),
+            'questionGroup': questionGroup
+            // 'questionContent': new FormControl(''),
+            // 'questionGroup': new FormGroup({})
+          });
+          // this.onSeletQuestionType(this.questionListModel[index].questionType, index)
+          if (this.questionListModel[index].questionType == 'Single choice') {
+            this.optionListSingleModel = JSON.parse(this.questionListModel[index].questionContent);
+
+            for (let index = 0; index < this.optionListSingleModel.length; index++) {
+              this.optionGroup = new FormGroup({
+                'optionText': new FormControl(this.optionListSingleModel[index].OptionText),
+              });
+              (<FormArray>questionGroup.get('options')).push(this.optionGroup);
+
+
+            }
+          }
+          if (this.questionListModel[index].questionType == 'Multi choice') {
+            this.optionListMultiModel = JSON.parse(this.questionListModel[index].questionContent);
+
+            for (let index = 0; index < this.optionListMultiModel.length; index++) {
+              this.optionGroup = new FormGroup({
+                'optionText': new FormControl(this.optionListMultiModel[index].OptionText),
+              });
+              (<FormArray>questionGroup.get('options')).push(this.optionGroup);
+
+
+            }
+          }
+          if (this.questionListModel[index].questionType == 'Paragraph') {
+            // content.setValue(this.questionListModel[index].questionContent);
+            (<FormControl>questionGroup.get('content')).setValue(this.questionListModel[index].questionContent);
+
+          }
+          (<FormArray>this.surveyForm.get('surveyQuestions')).push(surveyQuestionItem);
+        }
+        console.log(this.surveyForm)
+
+
+      })
+      // this.initForm()
+    }
     let surveyTitle = '';
     let description = '';
     let surveyType = '';
@@ -123,7 +211,6 @@ export class CreateEditSurveysComponent implements OnInit {
     });
 
     this.onAddQuestion();
-
   }
 
   onAddQuestion() {
@@ -162,6 +249,7 @@ export class CreateEditSurveysComponent implements OnInit {
       (this.surveyForm.controls.surveyQuestions['controls'][index].controls.questionGroup).addControl('content', content);
 
     }
+
   }
 
   addOptionControls(questionType, index) {
@@ -271,23 +359,47 @@ export class CreateEditSurveysComponent implements OnInit {
 
     console.log(survey);
     console.log('posting survey');
-    if (survey.Name == '') {
-      this.toastr.error('Thêm mới thất bại', 'Error', {
-        timeOut: 3000,
-      });
-    } else {
-      this._service.addNewSurvey(survey).subscribe((response) => {
-        console.log(response);
-        this.router.navigate(['/surveys']);
-        this.toastr.success('Thêm mới thành công', 'Success', {
+    if (this.editMode) {
+      if (survey.Name == '') {
+        this.toastr.error('Cập nhật thất bại', 'Error', {
           timeOut: 3000,
         });
-      }, (error) => {
-        console.log(error);
+      } else {
+        console.log(survey)
+        survey.SurveyId = this.surveyModel.surveyId;
+        this._service.updateSurvey(survey).subscribe((response) => {
+          console.log(response);
+          this.router.navigate(['/surveys']);
+          this.toastr.success('Cập nhật thành công', 'Success', {
+            timeOut: 3000,
+          });
+        }, (error) => {
+          console.log(error);
+          this.toastr.error('Cập nhật thất bại', 'Error', {
+            timeOut: 3000,
+          });
+        });
+      }
+    }
+    else {
+      if (survey.Name == '') {
         this.toastr.error('Thêm mới thất bại', 'Error', {
           timeOut: 3000,
         });
-      });
+      } else {
+        this._service.addNewSurvey(survey).subscribe((response) => {
+          console.log(response);
+          this.router.navigate(['/surveys']);
+          this.toastr.success('Thêm mới thành công', 'Success', {
+            timeOut: 3000,
+          });
+        }, (error) => {
+          console.log(error);
+          this.toastr.error('Thêm mới thất bại', 'Error', {
+            timeOut: 3000,
+          });
+        });
+      }
     }
   }
 

@@ -9,9 +9,9 @@ import { User } from '../../service/model/user-dto';
   styleUrls: ['./users-management.component.scss']
 })
 export class UsersManagementComponent implements OnInit {
-
+  loading = false;
   users: User[] = [];
-  user: User;
+  user: User= new User();
   page = 1;
   pageSize: number;
   totalRecords: number;
@@ -41,7 +41,6 @@ export class UsersManagementComponent implements OnInit {
       else {
         alert("Lỗi: " + result.errorMessage);
       }
-
     }, (error) => {
       setTimeout(() => {
         alert("Lỗi: " + JSON.stringify(error));
@@ -70,11 +69,17 @@ export class UsersManagementComponent implements OnInit {
   //   return today.toLocaleDateString("en-US", options);
   // }
   onActive(id){
+    this.loading = true;
+
     this._service.getById(id).subscribe(res => {
       this.user = res.item;
+      console.log(res);
+
       this._service.updateUser(this.user).subscribe(res => {
-        console.log(res);
+        console.log(res)
+
       this.loadAll();
+      this.loading = false;
 
       })
     })

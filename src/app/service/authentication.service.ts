@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { User } from './model/user-dto';
+import { ApiUrl } from '../common';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class AuthenticationService implements OnInit, OnDestroy{
         "Access-Control-Expose-Headers": "xsrf-token"
     }
     );
-    return this.httpClient.post<any>('https://localhost:44357/api/' + "Login/Login", JSON.stringify(account), { headers: headers })
+    return this.httpClient.post<any>(ApiUrl.apiUrl + "Login/Login", JSON.stringify(account), { headers: headers })
       .pipe(map(user => {
         if (user.isSuccess == true) {
           localStorage.setItem('currentUser', JSON.stringify(user.item));
@@ -58,7 +59,34 @@ export class AuthenticationService implements OnInit, OnDestroy{
         return user;
       }));
   }
-
+  register(UserName : string, Password: string, Email: String, Fullname: string) {
+    var account = {
+      UserName: UserName,
+      Password: Password,
+      Email: Email,
+      Fullname: Fullname
+    }
+    var headers : HttpHeaders = new HttpHeaders({
+      "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*",
+        "X-Content-Type-Options": "nosniff",
+        "Access-Control-Expose-Headers": "xsrf-token"
+    }
+    );
+    return this.httpClient.post<any>(ApiUrl.apiUrl + "UserOutside/Register", JSON.stringify(account), { headers: headers })
+      .pipe(map(user => {
+        if (user.isSuccess == true) {
+          localStorage.setItem('currentUser', JSON.stringify(user.item));
+          localStorage.setItem('access-token', user.item.token["jwtToken"]);
+          localStorage.setItem('expiration', user.item.token["expiration"]);
+          localStorage.setItem('user', user.item["username"]);
+          this.behaviorUserSubject.next(user.item);
+        }
+        return user;
+      }));
+  }
   logout() {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('access-token');

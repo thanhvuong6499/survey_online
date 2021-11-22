@@ -5,8 +5,12 @@
                 <div class="card">
                    
                     <div class="card-body">
+                        <span *ngIf="loading" style="margin-left: 50%;" class="spinner-border spinner-border-sm mr-1"></span>
+
                         <div class="table-responsive">
+
                             <table class="table">
+
                                 <thead class=" text-primary">
                                     <th style="text-align: center;">
                                         ID
@@ -54,7 +58,7 @@
                                       </td> -->
                                       <td style="text-align: center;">
                                           <button (click)="onActive(item.userId)" class="btn btn-primary fa fa-check-square"
-                                                  type="submit" style="font-size: 13px;">   Active</button>
+                                                  type="submit" style="font-size: 13px;"> {{(item.isActive === 1)? 'Deactive':'Active'}}</button>
                                       </td>
                                   </tr>
                                 </tbody>

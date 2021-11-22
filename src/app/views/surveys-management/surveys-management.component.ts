@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { BaseCondition } from '../../common';
 import { SurveysService } from '../../service/api/survey.service';
 import { Survey } from '../../service/model/survey-dto';
+import { ShareDialog } from './surveys-shared.component';
 
 @Component({
   selector: 'app-surveys-management',
@@ -10,7 +12,7 @@ import { Survey } from '../../service/model/survey-dto';
   styleUrls: ['./surveys-management.component.scss']
 })
 export class SurveysManagementComponent implements OnInit {
-
+  loading = false;
   survey: Survey;
   surveys: Survey[] = new Array<Survey>()
   page = 1;
@@ -18,15 +20,18 @@ export class SurveysManagementComponent implements OnInit {
   totalRecords: number;
   pageEvent: PageEvent;
   condition: BaseCondition<Survey> = new BaseCondition<Survey>();
+  matDialogRef: MatDialogRef<ShareDialog>;
+  linkShare: string = window.location.hostname+ "/#/evaluate-survey/";
   constructor(
-    private surveyService: SurveysService
+    private surveyService: SurveysService,
+    private matDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.loadAll();
   }
   loadAll(condi?: BaseCondition<Survey>) {
-   
+    this.loading = true
     this.surveyService.getAllSurveysWithPaging(condi).subscribe((result) => {
       if (result.errorCode == "") {
         this.surveys = result.itemList;
@@ -51,7 +56,7 @@ export class SurveysManagementComponent implements OnInit {
     }, () => {
     });
     
-    
+    this.loading = false
   }
   loadPages(page: number, pageSize: number) {
     debugger
@@ -71,4 +76,32 @@ export class SurveysManagementComponent implements OnInit {
   //     this.loadAll();
   //   })
   // }
+  OpenModal(code: string) {
+    this.matDialogRef = this.matDialog.open(ShareDialog, {
+      data: { linkShare: this.linkShare + code },
+      disableClose: true
+    });
+    console.log()
+
+    this.matDialogRef.afterClosed().subscribe(res => {
+      if ((res == true)) {
+        this.linkShare = window.location.hostname+ "/#/evaluate-survey/";
+      }
+    });
+  }
+  onChangeStatus(code){
+      this.loading = true;
+
+      this.surveyService.getSurveyByCode(code).subscribe(res => {
+      this.survey = res.item;
+
+      this.surveyService.onChangeStatus(this.survey).subscribe(res => {
+      console.log(res)
+
+      this.loadAll();
+      this.loading = false;
+
+      })
+    })
+  }
 }

@@ -94,7 +94,7 @@ export class EvaluateSurveyComponent implements OnInit {
       // 'surveyQuestions': surveyQuestions,
       // 'IsAnonymous': new FormControl(false, [Validators.required])
     });
-    this._service.getSurveyByCode(code).then(res => {
+    this._service.getSurveyByCode(code).subscribe(res => {
       this.surveyModel = res.item
       console.log('a model is' + this.surveyModel.questionList[0])
       this.questionListModel = this.surveyModel.questionList
@@ -283,6 +283,8 @@ export class EvaluateSurveyComponent implements OnInit {
 
     let formData = this.answerForm.value;
     console.log(formData);
+    alert("Cám ơn bạn đã hoàn thành khảo sát")
+    this.router.navigate(['/dashboard']);
     // console.log(this.surveyAnswerItem.questionId)
     this.postAnswer();
 

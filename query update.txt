@@ -1,0 +1,80 @@
+USE [SurveyMS]
+GO
+/****** Object:  StoredProcedure [dbo].[Survey_Update]    Script Date: 11/20/2021 2:00:07 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[Survey_Update] 
+    @SurveyId INT ,
+    @Name NVARCHAR(200) = N'',
+    @Description NVARCHAR(4000) = N'',
+    @Status INT = 0 ,
+	@Code NVARCHAR(1000) = N'',
+	
+	--@StepImg text,
+	@IN_QuestionListJson NVARCHAR(MAX) = N'',
+	@OUT_ErrorCode            NVARCHAR(2) OUTPUT, 
+	@OUT_ReturnMessage        NVARCHAR(255) OUTPUT,
+	@OUT_NewId                INT           = 0 OUTPUT
+AS 
+    BEGIN
+        BEGIN TRY
+           IF NOT EXISTS (SELECT SurveyId 
+							FROM Survey WITH (NOLOCK)
+							WHERE SurveyId = @SurveyId)
+				BEGIN
+					SET @OUT_ErrorCode  = N'1';
+					SET @OUT_ReturnMessage  = N'Không tồn tại khảo sát'
+					RETURN;
+				END
+			IF(@SurveyId <> '' AND @SurveyId IS NOT NULL)
+           
+            UPDATE Survey
+			SET
+			Name = @Name,
+			Description = @Description,
+			UpdatedDate = GETDATE()
+            WHERE SurveyId = @SurveyId;
+							---- Thông báo cập nhật thành công
+							--SET @ErrorMessage = N'Cập nhập thành công';
+							---- Trả về mã lỗi bằng 0 nếu Insert dữ liệu thành công
+							--SET @ErrorCode  = N'0';
+							--RETURN;
+
+          
+            
+			
+			BEGIN
+			WITH Json_Data 
+			AS (SELECT
+				   QuestionId,
+				   QuestionTitle,
+				   QuestionType,
+				   QuestionContent
+			FROM OPENJSON(@IN_QuestionListJson) WITH (QuestionId INT '$.QuestionId', QuestionTitle NVARCHAR(200) '$.QuestionTitle', QuestionType NVARCHAR(MAX) '$.QuestionType', QuestionContent NVARCHAR(4000) '$.QuestionContent'))
+			UPDATE q
+			SET
+			q.QuestionTitle = Json_Data.QuestionTitle,
+			q.QuestionContent= Json_Data.QuestionContent,
+			q.QuestionType= Json_Data.QuestionType
+			FROM Question As q
+			INNER JOIN Json_Data ON q.QuestionId = Json_Data.QuestionId
+			WHERE q.SurveyId = @SurveyId AND q.QuestionId = Json_Data.QuestionId
+			END;
+
+			
+
+        END TRY
+        BEGIN CATCH
+            IF @@TRANCOUNT > 0
+                ROLLBACK TRANSACTION;
+            SET @OUT_ErrorCode = N'1';
+            SET @OUT_ReturnMessage = ERROR_MESSAGE();
+        END CATCH;
+    END;

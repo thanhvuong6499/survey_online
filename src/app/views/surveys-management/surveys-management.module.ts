@@ -14,6 +14,7 @@ import { MatContenteditableModule } from 'mat-contenteditable';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ToastrModule } from 'ngx-toastr';
 import { EvaluateSurveyComponent } from './survey-evaluate/survey-evaluate.component';
+import { ShareDialog } from './surveys-shared.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { EvaluateSurveyComponent } from './survey-evaluate/survey-evaluate.compo
     MatContenteditableModule,
     
   ],
-  declarations: [ SurveysManagementComponent,CreateEditSurveysComponent,EvaluateSurveyComponent]
+  declarations: [ SurveysManagementComponent,CreateEditSurveysComponent,EvaluateSurveyComponent,ShareDialog],
+  entryComponents: [ShareDialog]
 })
 export class SurveysModule { }

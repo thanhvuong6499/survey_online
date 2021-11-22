@@ -48,10 +48,10 @@ export class SurveysService extends BaseApiService {
     return this.http.get(this.rootUrl + '/GetListRecipe');
   }
 
-  getSurveyByCode(param: string):Promise<any> {
+  getSurveyByCode(param: string):Observable<any> {
     return this.http.post(this.rootUrl + `/GetSurveyByCode?code=${param}`, { headers: HttpHeadersOptions.headers })
-    .pipe(catchError((err) => this.handleError(err)))
-    .toPromise();
+    // .pipe(catchError((err) => this.handleError(err)))
+    // .toPromise();
   }
 
   getSurveyByUserId(param: GetByUserPagging): Observable<any> {
@@ -65,6 +65,12 @@ export class SurveysService extends BaseApiService {
    */
   addNewSurvey(param: Survey): Observable<any> {
     return this.http.post(this.rootUrl + '/AddNewSurvey', param);
+  }
+  updateSurvey(param: Survey): Observable<any> {
+    return this.http.post(this.rootUrl + '/UpdateSurvey', param);
+  }
+  onChangeStatus(param: Survey): Observable<any> {
+    return this.http.post(this.rootUrl + '/OnChangeStatus', param,{ headers: HttpHeadersOptions.headers });
   }
   getAllSimilar(param: number): Observable<any> {
     return this.http.post(this.rootUrl + '/GetRecipeSimilar', param)

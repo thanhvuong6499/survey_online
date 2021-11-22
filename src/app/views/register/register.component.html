@@ -1,50 +1,51 @@
 <div class="limiter">
-  <div class="container-login100" style="background-image: url('../../assets/img/bg-01.jpg');">
-      <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-          <span class="login100-form-title p-b-49">
-              Register
-          </span>
+    <div class="container-login100" style="background-image: url('../../assets/img/bg-01.jpg');">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <span class="login100-form-title p-b-49">
+                Đăng ký
+            </span>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <div class="wrap-input100 validate-input m-b-23" data-validate="Tên tài khoản không được để trống ">
+                    <span class="label-input100">Tên tài khoản</span>
+                    <input class="input100" formControlName="username" type="text" placeholder="Nhập tên tài khoản của bạn">
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
+                </div>
 
-          <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
-              <span class="label-input100">Username</span>
-              <input class="input100" type="text" placeholder="Type your username">
-              <span class="focus-input100" data-symbol="&#xf206;"></span>
-          </div>
+                <div class="wrap-input100 validate-input m-b-23" data-validate="Mật khẩu không được để trống">
+                    <span class="label-input100">Mật khẩu</span>
+                    <input class="input100" formControlName="password" type="password" placeholder="Nhập mật khẩu của bạn">
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
+                </div>
 
-          <div class="wrap-input100 validate-input m-b-23" data-validate="Password is reauired">
-              <span class="label-input100">Password</span>
-              <input class="input100" type="password" placeholder="Type your password">
-              <span class="focus-input100" data-symbol="&#xf206;"></span>
-          </div>
+                <div class="wrap-input100 validate-input m-b-23" data-validate="Email không được để trống">
+                    <span class="label-input100">Email</span>
+                    <input class="input100" formControlName="email" type="text" placeholder="Nhập email">
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
+                </div>
 
-          <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
-              <span class="label-input100">Email</span>
-              <input class="input100" type="text" placeholder="Type your email">
-              <span class="focus-input100" data-symbol="&#xf206;"></span>
-          </div>
+                <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                    <span class="label-input100">Họ và tên đầy đủ</span>
+                    <input class="input100" type="text" formControlName="fullname" placeholder="Nhập họ tên đầy đủ của bạn">
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
+                </div>
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button class="login100-form-btn">
+                            Đăng ký
+                        </button>
+                    </div>
+                </div>
 
-          <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
-              <span class="label-input100">Age</span>
-              <input class="input100" type="number" placeholder="Type your age">
-              <span class="focus-input100" data-symbol="&#xf206;"></span>
-          </div>
 
-          <div class="container-login100-form-btn">
-              <div class="wrap-login100-form-btn">
-                  <div class="login100-form-bgbtn"></div>
-                  <button class="login100-form-btn">
-                      Register
-                  </button>
-              </div>
-          </div>
-
-          <div class="flex-col-c p-t-100">
-              <a routerLink="/login" class="txt2">
-                  Login
-              </a>
-          </div>
-      </div>
-  </div>
+            </form>
+            <div class="flex-col-c p-t-100">
+                <a routerLink="/login" class="txt2">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 

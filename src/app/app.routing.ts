@@ -61,6 +61,13 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'edit-survey/:code',
+    component: CreateEditSurveysComponent,
+    data: {
+      title: 'Edit Survey Page'
+    }
+  },
+  {
     path: 'evaluate-survey/:code',
     component: EvaluateSurveyComponent,
     data: {

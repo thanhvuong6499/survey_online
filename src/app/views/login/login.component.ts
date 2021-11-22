@@ -9,7 +9,7 @@ import { AuthenticationService } from '../../service/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit,OnDestroy {
-
+  public checkRoleId = <any>localStorage.getItem('roledId');
   loginForm : FormGroup;
   loading = false;
   submitted = false;
@@ -44,11 +44,18 @@ export class LoginComponent implements OnInit,OnDestroy {
     this.loading = true;
     this.authenticationService.login(this.f.username.value, this.f.password.value)
       .subscribe((result) => {
-
+        console.log(result)
         if (result.errorCode == "0") {
           this.error = '';
-        
-          this.router.navigate(['/dashboard']);
+          localStorage.setItem("roledId", result.item.roleId);
+            localStorage.setItem("email", result.item.email);
+            localStorage.setItem("fullName", result.item.fullName);
+            localStorage.setItem("username", result.item.username);
+            if(this.checkRoleId == 1)
+            this.router.navigate(['/dashboard']);
+            else{
+              this.router.navigate(['/surveys']);
+            }
         }
         else {
           if (result.errorCode == "1") {

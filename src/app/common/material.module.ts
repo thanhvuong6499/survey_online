@@ -80,7 +80,7 @@ import { MatBadgeModule } from '@angular/material/badge';
         MatAutocompleteModule,
         MatSlideToggleModule,
         MatGridListModule,
-        MatBadgeModule
+        MatBadgeModule,
     ]
 })
 export class MaterialModule { }
