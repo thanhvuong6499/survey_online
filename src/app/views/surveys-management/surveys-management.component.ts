@@ -41,7 +41,7 @@ export class SurveysManagementComponent implements OnInit {
           this.page = condi.PageIndex;
         }
         else {
-          this.pageSize = 5;
+          this.pageSize = 10;
           this.page = 1;
         }
       }

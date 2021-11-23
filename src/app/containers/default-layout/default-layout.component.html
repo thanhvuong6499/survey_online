@@ -2,7 +2,7 @@
   [navbarBrandRouterLink]="['/dashboard']"
   [fixed]="true"
   [navbarBrandFull]="{src: 'assets/img/brand/logoEad.png', width: 155, height: 90, alt: 'AED Logo'}"
-  [navbarBrandMinimized]="{src: 'assets/img/brand/logoEad.png', width: 155, height: 90, alt: 'AED Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/avatars/9.jpg', width: 155, height: 90, alt: 'AED Logo'}"
   [sidebarToggler]="'lg'"
   [asideMenuToggler]="false"
   [mobileAsideMenuToggler]="false" >
@@ -20,7 +20,7 @@
   <ul class="nav navbar-nav ml-auto">
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com"/>
+        <img src="assets/img/avatars/8.png" class="img-avatar" alt="admin@bootstrapmaster.com"/>
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <a class="dropdown-item" href="#" onclick="localStorage.clear()"><i class="fa fa-lock"></i> Logout</a>
@@ -36,21 +36,19 @@
     <app-sidebar-minimizer></app-sidebar-minimizer>
   </app-sidebar>
   <!-- Main content -->
-  <main class="main">
+  <main class="main" style="background-color: #fff;">
     <!-- Breadcrumb -->
     <!-- breaking change 'cui-breadcrumb' -->
     <cui-breadcrumb>
       <li class="breadcrumb-menu d-md-down-none">
       </li>
     </cui-breadcrumb>
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: #fff;">
       <router-outlet></router-outlet>
     </div><!-- /.container-fluid -->
   </main>
   <app-aside [fixed]="true" [display]="false" [ngClass]="'test'">
   </app-aside>
 </div>
-<app-footer>
-  <!-- <span><a href="https://coreui.io">CoreUI</a> &copy; 2021 creativeLabs.</span>
-  <span class="ml-auto">Powered by <a href="https://coreui.io/angular">CoreUI for Angular</a></span> -->
-</app-footer>
+<!-- <app-footer style="background-color: #fff;">
+</app-footer> -->

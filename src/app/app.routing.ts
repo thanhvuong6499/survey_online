@@ -9,6 +9,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { CreateEditSurveysComponent } from './views/surveys-management/create-edit-surveys/create-edit-surveys.component';
+import { ReportSurveyComponent } from './views/surveys-management/report-survey/report-survey.component';
 import { EvaluateSurveyComponent } from './views/surveys-management/survey-evaluate/survey-evaluate.component';
 import { UsersManagementComponent } from './views/users-management/users-management.component';
 
@@ -58,6 +59,13 @@ export const routes: Routes = [
     component: CreateEditSurveysComponent,
     data: {
       title: 'Create Survey Page'
+    }
+  },
+  {
+    path: 'report-survey',
+    component: ReportSurveyComponent,
+    data: {
+      title: 'Answer Survey Page'
     }
   },
   {

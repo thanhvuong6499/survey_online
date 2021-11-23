@@ -31,14 +31,14 @@ export class SurveysService extends BaseApiService {
     if (condi != undefined) {
       condition = {
         PageIndex: condi.PageIndex,
-        PageSize: 5,
+        PageSize: 10,
         FilterRuleList: condi.FilterRuleList
       }
     }
     else {
       condition = {
         PageIndex: 1,
-        PageSize: 5
+        PageSize: 10
       }
 
     }

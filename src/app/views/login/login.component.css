@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: Poppins-Regular;
     src: url("../../../assets/fonts/poppins/Poppins-Regular.ttf");
 }
@@ -16,7 +16,7 @@
 @font-face {
     font-family: Poppins-SemiBold;
     src: url("../../../assets/fonts/poppins/Poppins-SemiBold.ttf");
-}
+} */
 
 * {
     margin: 0px;
@@ -28,6 +28,7 @@ body,
 html {
     height: 100%;
     font-family: Poppins-Regular, sans-serif;
+    font-style: bold;
 }
 
 /*---------------------------------------------*/

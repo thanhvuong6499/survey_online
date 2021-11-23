@@ -224,7 +224,6 @@ export class CreateEditSurveysComponent implements OnInit {
     });
 
     (<FormArray>this.surveyForm.get('surveyQuestions')).push(surveyQuestionItem);
-
   }
 
   onRemoveQuestion(index) {
@@ -246,7 +245,9 @@ export class CreateEditSurveysComponent implements OnInit {
     }
     if (questionType === 'Paragraph') {
       let content = new FormControl('');
+      
       (this.surveyForm.controls.surveyQuestions['controls'][index].controls.questionGroup).addControl('content', content);
+      (this.surveyForm.controls.surveyQuestions['controls'][index].controls.questionGroup).removeControl('options');
 
     }
 
@@ -334,7 +335,7 @@ export class CreateEditSurveysComponent implements OnInit {
 
 
       if (question.questionGroup.hasOwnProperty('options')) {
-
+        debugger
 
 
         question.questionGroup.options.forEach(option => {

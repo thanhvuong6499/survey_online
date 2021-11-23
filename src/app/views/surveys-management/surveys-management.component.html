@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-danger" style="display: flex; justify-content: space-between;">
-                        <h4 class="card-title ">Survey Management</h4>
+                        <h2 class="card-title ">Survey Management</h2>
                         <button class="btn btn-primary btn-sm" style="float: right; margin-top: 4px; font-size: 13px;"
                             routerLink="/create-survey">
                             <span class="fa fa-plus"></span>
@@ -75,7 +75,7 @@
                             <div *ngIf="totalRecords > 0 else nondata" style="margin-left: 37%;">
                                 <nav>
                                     <ul class="pagination">
-                                        <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [maxSize]="5"
+                                        <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [maxSize]="10"
                                             [pageSize]="pageSize" [rotate]="true" [boundaryLinks]="true"
                                             (pageChange)="loadPages($event, condition.PageSize)"></ngb-pagination>
                                     </ul>

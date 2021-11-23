@@ -1,10 +1,10 @@
 import { HttpHeaders } from '@angular/common/http';
 
 export const ApiUrl = {
-    // apiUrl: "http://localhost:59513/api/",
-    // prod: true
-    apiUrl:  "http://35.188.14.184:59513/api/",
+    apiUrl: "http://localhost:59513/api/",
     prod: true
+    // apiUrl:  "http://35.188.14.184:59513/api/",
+    // prod: true
 };
 
 export const HttpHeadersOptions = {

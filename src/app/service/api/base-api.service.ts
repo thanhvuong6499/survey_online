@@ -5,8 +5,8 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export abstract class BaseApiService {
     protected get rootUrl() {
-        return 'http://35.188.14.184:59513/api/' + this.changeUrl();
-        // return 'http://localhost:59513/api' + this.changeUrl();
+        // return 'http://35.188.14.184:59513/api/' + this.changeUrl();
+        return 'http://localhost:59513/api/' + this.changeUrl();
     }
 
     protected http: HttpClient;

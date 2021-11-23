@@ -22,11 +22,11 @@ export class Guid {
   }
 }
 @Component({
-  selector: 'app-survey-evaluate',
-  templateUrl: './survey-evaluate.component.html',
-  styleUrls: ['./survey-evaluate.component.scss']
+  selector: 'app-survey-report',
+  templateUrl: './report-survey.component.html',
+  styleUrls: ['./report-survey.component.scss']
 })
-export class EvaluateSurveyComponent implements OnInit {
+export class ReportSurveyComponent implements OnInit {
   surveyForm: FormGroup;
   answerForm: FormGroup;
   public Editor = ClassicEditor;

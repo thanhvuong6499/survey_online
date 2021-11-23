@@ -1,7 +1,7 @@
 import { FilterItem } from './FilterItem';
 
 export class BaseCondition<T> {
-    PageSize: number = 5;
+    PageSize: number = 10;
     PageIndex: number = 1;
     FilterRuleList? : FilterItem[] = new Array<FilterItem>();
     IN_WHERE?: string = "";
